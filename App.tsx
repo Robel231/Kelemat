@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Header } from './components/Header';
 import { Generator } from './components/Generator';
 import { PaletteCard } from './components/PaletteCard';
@@ -15,6 +15,9 @@ const App: React.FC = () => {
   
   // State for export modal
   const [exportingPalette, setExportingPalette] = useState<Palette | null>(null);
+  
+  // Ref for infinite scrolling
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   // Helper to add toast
   const addToast = useCallback((text: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -54,6 +57,24 @@ const App: React.FC = () => {
     fetchPalettes(GenerationTheme.TRENDING, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Infinite Scroll Observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading && palettes.length > 0) {
+          fetchPalettes(currentTheme, false);
+        }
+      },
+      { threshold: 0.1, rootMargin: '200px' } // Load 200px before reaching bottom
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => observer.disconnect();
+  }, [loading, palettes.length, currentTheme, fetchPalettes]);
 
   return (
     <div className="min-h-screen bg-gray-950 flex flex-col">
@@ -107,20 +128,9 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* Load More Trigger */}
-        {!loading && palettes.length > 0 && (
-           <div className="mt-12 md:mt-16 flex justify-center">
-             <button
-               onClick={() => fetchPalettes(currentTheme, false)}
-               className="px-6 py-3 md:px-8 md:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-semibold transition-colors flex items-center gap-2 border border-gray-700 shadow-lg text-sm md:text-base"
-             >
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-               </svg>
-               Generate More Palettes
-             </button>
-           </div>
-        )}
+        {/* Infinite Scroll Sentinel */}
+        <div ref={observerTarget} className="h-10 w-full mt-4" aria-hidden="true" />
+        
       </main>
       
       <footer className="border-t border-gray-900 py-8 text-center mt-auto bg-gray-950 px-4">
