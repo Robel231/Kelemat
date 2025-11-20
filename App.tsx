@@ -133,8 +133,29 @@ const App: React.FC = () => {
         
       </main>
       
-      <footer className="border-t border-gray-900 py-8 text-center mt-auto bg-gray-950 px-4">
-         <p className="text-gray-500 font-medium text-sm md:text-base">Developed by <span className="text-purple-400 hover:text-purple-300 transition-colors cursor-default">Robel Shemeles</span></p>
+      <footer className="border-t border-gray-900/50 py-12 mt-auto bg-gray-950 px-4 relative overflow-hidden">
+          {/* Decorative background glow */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] h-[100px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+          <div className="relative z-10 flex flex-col items-center justify-center gap-4">
+              <a 
+                  href="https://www.linkedin.com/in/robel-shemeles-b80a31377" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 px-5 py-2.5 bg-gray-900/50 hover:bg-gray-800 border border-gray-800 hover:border-purple-500/30 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]"
+              >
+                  <span className="text-gray-400 text-sm">Developed by</span>
+                  <span className="font-semibold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-500 transition-all">
+                      Robel Shemeles
+                  </span>
+                  <svg className="w-5 h-5 text-gray-500 group-hover:text-[#0077b5] transition-colors" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 21.227.792 22 1.771 22h20.451C23.2 22 24 21.227 24 20.271V1.729C24 .774 23.2 0 22.226 0z"/>
+                  </svg>
+              </a>
+              <p className="text-[10px] text-gray-600 font-mono tracking-widest uppercase opacity-60">
+                  Built with React 19 & Gemini 2.5 Flash
+              </p>
+          </div>
       </footer>
 
       {/* Export Modal */}
